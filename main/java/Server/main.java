@@ -24,9 +24,8 @@ public class main {
         server.addConnectListener(new ConnectEvent());
         server.addDisconnectListener(new DisconnectEvent());
 
-        server.addEventListener(ServerEvents.REGISTER.getString(), RegisterExtracter.class, new RegisterListener());
-        server.addEventListener(ServerEvents.LOGIN.getString(), LoginExtracter.class, new LoginListener());
-        server.addEventListener(ServerEvents.LOGOUT.getString(), Extracter.class, new LogoutListen());
+//        server.addEventListener(ServerEvents.SIGNUP.getString(), SignUpExtracter.class, new SignUpListener());
+        server.addEventListener(ServerEvents.REGISTER.getString(),RegisterExtracter.class, new RegisterListener());
 
         server.start();
 

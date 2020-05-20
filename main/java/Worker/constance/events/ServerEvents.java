@@ -1,4 +1,4 @@
-package Server.constance.events;
+package Worker.constance.events;
 
 public enum ServerEvents {
     REGISTER("REGISTER"), LOGIN("LOGIN"), LOGOUT("LOGOUT"), SIGNUP("SIGNUP") ;

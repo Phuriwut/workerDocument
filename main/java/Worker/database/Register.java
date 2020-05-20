@@ -1,18 +1,22 @@
-package Server.dataextracter;
+package Worker.database;
 
 import org.json.JSONObject;
 
-public class RegisterExtracter extends Extracter{
+public class Register {
     private String userID,taxID,nameContract;
     private String numberPhone,nameConsumer,address;
+    private String session_id;
 
-    public RegisterExtracter(String userID, String taxID, String nameContract, String numberPhone, String nameConsumer, String address) {
+    public Register(String userID, String taxID, String nameContract
+            , String numberPhone, String nameConsumer, String address
+            , String session_id) {
         this.userID = userID;
         this.taxID = taxID;
         this.nameContract = nameContract;
         this.numberPhone = numberPhone;
         this.nameConsumer = nameConsumer;
         this.address = address;
+        this.session_id = session_id;
     }
 
     public String getUserID() { return userID; }
@@ -39,6 +43,10 @@ public class RegisterExtracter extends Extracter{
 
     public void setAddress(String address) { this.address = address; }
 
+    public String getSession_id() { return session_id; }
+
+    public void setSession_id(String session_id) { this.session_id = session_id; }
+
     @Override
     public String toString() {
         JSONObject obj = new JSONObject();
@@ -48,7 +56,6 @@ public class RegisterExtracter extends Extracter{
         obj.put("numberPhone",numberPhone);
         obj.put("nameConsumer",nameConsumer);
         obj.put("address",address);
-        obj.put("session_id",sessionID);
         return obj.toString();
     }
 }

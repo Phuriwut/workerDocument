@@ -1,5 +1,6 @@
 package Server.eventhandler;
 
+import Server.constance.events.ServerEvents;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import Server.dataextracter.LoginExtracter;
@@ -20,7 +21,7 @@ public class LoginListener extends EventListener<LoginExtracter> {
         // We will send a small text message saying 'Hello World!!!'
         if(true) {
             JSONObject obj = new JSONObject();
-            obj.put("type", "LOGIN");
+            obj.put("type", ServerEvents.LOGIN.getString());
             obj.put("data",loginExtracter.toString());
             this.messager.send(obj.toString());
             System.out.println("------------------------------------------\nMessage LOGIN::: '" + loginExtracter.toString()+ "'\n------------------------------------------");
