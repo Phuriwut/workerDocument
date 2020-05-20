@@ -1,6 +1,6 @@
 package Server.session;
 
-public class SessionStore {
+public class SessionStore{
     private static SessionStoreInstance ssi;
 
     public static SessionStoreInstance getInstance(){

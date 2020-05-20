@@ -1,18 +1,16 @@
 package Server;
 
-import Server.constance.events.ServerEvents;
-import Server.dataextracter.RegisterExtracter;
-import Server.eventhandler.ConnectEvent;
-import Server.eventhandler.DisconnectEvent;
-import Server.eventhandler.RegisterListener;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.store.MemoryStoreFactory;
-
-import javax.jms.JMSException;
+import javax.jms.*;
+import Server.constance.events.ServerEvents;
+import Server.dataextracter.*;
+import Server.user.sender.data.NotificateAlert;
+import Server.eventhandler.*;
 
 public class main {
-    public static void main(String args[]) throws JMSException {
+    public static void main(String args[])  throws JMSException{
 
         Configuration config = new Configuration();
         config.setHostname("0.0.0.0");
@@ -27,7 +25,15 @@ public class main {
         server.addDisconnectListener(new DisconnectEvent());
 
         server.addEventListener(ServerEvents.REGISTER.getString(), RegisterExtracter.class, new RegisterListener());
+        server.addEventListener(ServerEvents.LOGIN.getString(), LoginExtracter.class, new LoginListener());
+        server.addEventListener(ServerEvents.LOGOUT.getString(), Extracter.class, new LogoutListen());
 
         server.start();
+
+        Thread th = new Thread(new UserSender());
+        th.start();
+
+        NotificateAlert nta = new NotificateAlert(server);
+        nta.notificateStart();
     }
 }

@@ -1,11 +1,12 @@
 package Server.eventhandler;
 
+import com.corundumstudio.socketio.HandshakeData;
+import com.corundumstudio.socketio.SocketIOClient;
+import com.corundumstudio.socketio.listener.ConnectListener;
 import Server.constance.events.ClientEvents;
 import Server.session.SessionData;
 import Server.session.SessionStore;
 import Server.session.SessionStoreInstance;
-import com.corundumstudio.socketio.SocketIOClient;
-import com.corundumstudio.socketio.listener.ConnectListener;
 
 public class ConnectEvent implements ConnectListener {
     SessionStoreInstance session = SessionStore.getInstance();

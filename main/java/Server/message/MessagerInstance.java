@@ -49,7 +49,7 @@ public class MessagerInstance {
         this.producerRegister.send(this.session.createTextMessage(message));
     }
 
-    public String recieve() throws JMSException {
+    public String recieve() throws JMSException{
         this.message = this.consumer.receive();
 
         // We will be using TestMessage in our example. MessageProducer sent us a TextMessage

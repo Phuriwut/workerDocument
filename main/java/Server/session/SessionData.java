@@ -19,7 +19,9 @@ public class SessionData {
 
     public void setClient(SocketIOClient client) { this.client = client; }
 
-    public SocketIOClient getClient() { return client; }
+    public SocketIOClient getClient() {
+        return client;
+    }
 
     public String getFirstname() { return firstname; }
 
