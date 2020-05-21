@@ -40,14 +40,16 @@ public class RegisterWorker extends Worker<Register> implements Runnable{
     }
 
     public void successRegister() throws SQLException, JMSException {
-        PreparedStatement ppsm = database.preparedQuery("INSERT INTO `user`(`userID`, `taxID`, `nameConstract`, `numberPhone`, `nameConsumer`, `address`, `is_accpet`) VALUES (?,?,?,?,?,?,?)");
-        ppsm.setString(1,this.data.getUserID());
-        ppsm.setString(2,this.data.getTaxID());
-        ppsm.setString(3,this.data.getNameContract());
-        ppsm.setString(4,this.data.getNumberPhone());
-        ppsm.setString(5,this.data.getNameConsumer());
-        ppsm.setString(6,this.data.getAddress());
-        ppsm.setBoolean(7,true);
+        PreparedStatement ppsm = database.preparedQuery("INSERT INTO `user`(`number`, `userID`, `taxID`, `FirstnameContract`, `LastnameContract`, `numberPhone`, `nameConsumer`, `address`, `is_accept`) VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7],[value-8],[value-9])");
+        ppsm.setString(1,this.data.getNumber());
+        ppsm.setString(2,this.data.getUserID());
+        ppsm.setString(3,this.data.getTaxID());
+        ppsm.setString(4,this.data.getFirstnameContract());
+        ppsm.setString(5,this.data.getLastnameContract());
+        ppsm.setString(6,this.data.getNumberPhone());
+        ppsm.setString(7,this.data.getNameConsumer());
+        ppsm.setString(8,this.data.getAddress());
+        ppsm.setBoolean(9,true);
         ppsm.execute();
 
         JSONObject obj = new JSONObject();

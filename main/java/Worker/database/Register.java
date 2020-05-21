@@ -3,56 +3,102 @@ package Worker.database;
 import org.json.JSONObject;
 
 public class Register {
-    private String userID,taxID,nameContract;
+    private String number;
+    private String userID,taxID,FirstnameContract,LastnameContract;
     private String numberPhone,nameConsumer,address;
     private String session_id;
 
-    public Register(String userID, String taxID, String nameContract
-            , String numberPhone, String nameConsumer, String address
-            , String session_id) {
+    public Register(String number, String userID, String taxID, String firstnameContract, String lastnameContract, String numberPhone, String nameConsumer, String address, String session_id) {
+        this.number = number;
         this.userID = userID;
         this.taxID = taxID;
-        this.nameContract = nameContract;
+        this.FirstnameContract = firstnameContract;
+        this.LastnameContract = lastnameContract;
         this.numberPhone = numberPhone;
         this.nameConsumer = nameConsumer;
         this.address = address;
         this.session_id = session_id;
     }
 
-    public String getUserID() { return userID; }
+    public String  getNumber() {
+        return number;
+    }
 
-    public void setUserID(String userID) { this.userID = userID; }
+    public void setNumber(String number) {
+        this.number = number;
+    }
 
-    public String getTaxID() { return taxID; }
+    public String getUserID() {
+        return userID;
+    }
 
-    public void setTaxID(String taxID) { this.taxID = taxID; }
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
 
-    public String getNameContract() { return nameContract; }
+    public String getTaxID() {
+        return taxID;
+    }
 
-    public void setNameContract(String nameContract) { this.nameContract = nameContract; }
+    public void setTaxID(String taxID) {
+        this.taxID = taxID;
+    }
 
-    public String getNumberPhone() { return numberPhone; }
+    public String getFirstnameContract() {
+        return FirstnameContract;
+    }
 
-    public void setNumberPhone(String numberPhone) { this.numberPhone = numberPhone; }
+    public void setFirstnameContract(String firstnameContract) {
+        FirstnameContract = firstnameContract;
+    }
 
-    public String getNameConsumer() { return nameConsumer; }
+    public String getLastnameContract() {
+        return LastnameContract;
+    }
 
-    public void setNameConsumer(String nameConsumer) { this.nameConsumer = nameConsumer; }
+    public void setLastnameContract(String lastnameContract) {
+        LastnameContract = lastnameContract;
+    }
 
-    public String getAddress() { return address; }
+    public String getNumberPhone() {
+        return numberPhone;
+    }
 
-    public void setAddress(String address) { this.address = address; }
+    public void setNumberPhone(String numberPhone) {
+        this.numberPhone = numberPhone;
+    }
 
-    public String getSession_id() { return session_id; }
+    public String getNameConsumer() {
+        return nameConsumer;
+    }
 
-    public void setSession_id(String session_id) { this.session_id = session_id; }
+    public void setNameConsumer(String nameConsumer) {
+        this.nameConsumer = nameConsumer;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getSession_id() {
+        return session_id;
+    }
+
+    public void setSession_id(String session_id) {
+        this.session_id = session_id;
+    }
 
     @Override
     public String toString() {
         JSONObject obj = new JSONObject();
         obj.put("userID",userID);
         obj.put("taxID",taxID);
-        obj.put("nameContract",nameContract);
+        obj.put("FirstnameContract", FirstnameContract);
+        obj.put("LastnameContract", LastnameContract);
         obj.put("numberPhone",numberPhone);
         obj.put("nameConsumer",nameConsumer);
         obj.put("address",address);
