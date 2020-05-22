@@ -9,6 +9,7 @@ public class Sheet {
     private String enddate;
     private int day;
     private String salesman;
+    private String session_id;
 
     public Sheet(String QNum, String userID, String date, String enddate, int day, String salesman) {
         this.QNum = QNum;
@@ -43,6 +44,10 @@ public class Sheet {
 
     public void setSalesman(String salesman) { this.salesman = salesman; }
 
+    public String getSession_id() { return session_id; }
+
+    public void setSession_id(String session_id) { this.session_id = session_id; }
+
     @Override
     public String toString() {
         JSONObject obj = new JSONObject();
@@ -52,7 +57,9 @@ public class Sheet {
         obj.put("enddate",enddate);
         obj.put("day",day);
         obj.put("salesname",salesman);
+        obj.put("session_id",session_id);
 
         return obj.toString();
     }
+
 }

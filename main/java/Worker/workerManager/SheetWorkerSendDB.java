@@ -9,10 +9,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class SheetWorkerReceive extends Worker<Sheet> implements Runnable{
+public class SheetWorkerSendDB extends Worker<Sheet> implements Runnable{
     int num = 0;
 
-    public SheetWorkerReceive(String message, Messager messanger) {
+    public SheetWorkerSendDB(String message, Messager messanger) {
         super(Sheet.class,message,messanger);
     }
 

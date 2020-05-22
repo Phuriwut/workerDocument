@@ -37,14 +37,16 @@ public class workerManager {
                     workers.add(th);
                     System.out.println(this.workers.size());
                     th.start();
-//                }else if (type.equals(ServerEvents.SHEET.getString())){
-//                    Thread th = new Thread(new.)
-//                }
-//                }else if(type.equals(ServerEvents.LOGIN.getString())){
-//                    Thread th = new Thread(new LoginWorker(data, this.messager));
-//                    workers.add(th);
-//                    System.out.println(this.workers.size());
-//                    th.start();
+                }else if (type.equals(ServerEvents.SHEETTODB.getString())){
+                    Thread th = new Thread(new SheetWorkerSendDB(data,this.messager));
+                    workers.add(th);
+                    System.out.println(this.workers.size());
+                    th.start();
+               }else if(type.equals(ServerEvents.SHEET.getString())){
+                    Thread th = new Thread(new SheetWorker(data,this.messager));
+                    workers.add(th);
+                    System.out.println(this.workers.size());
+                    th.start();
                 }
             } catch (JMSException e) {
                 e.printStackTrace();
