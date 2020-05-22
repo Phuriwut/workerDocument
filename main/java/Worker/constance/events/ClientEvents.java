@@ -1,7 +1,9 @@
 package Worker.constance.events;
 
 public enum ClientEvents {
-    LOGIN_RECEIVE("LOGIN_RECEIVE"), NOTIFICATE("NOTIFICATE"), RECEIVE_PROFILE("RECEIVE_PROFILE");
+    LOGIN_RECEIVE("LOGIN_RECEIVE"), NOTIFICATE("NOTIFICATE"),
+    RECEIVE_PROFILE("RECEIVE_PROFILE"), SHEET_RECEIVE("SHEET_RECEIVE")
+    ;
 
     private String messageEvents;
 

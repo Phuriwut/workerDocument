@@ -12,7 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class RegisterWorker extends Worker<Register> implements Runnable{
-    public RegisterWorker(String message, Messager messager){super(Register.class,message,messager );}
+    public RegisterWorker(String message, Messager messager){
+        super(Register.class,message,messager );}
 
     @Override
     public void run() {
@@ -55,17 +56,31 @@ public class RegisterWorker extends Worker<Register> implements Runnable{
         JSONObject obj = new JSONObject();
         obj.put("status",0);
         obj.put("title","Success");
-        obj.put("detail","You can check on database/isc");
+        obj.put("detail","สามารถตรวจสอบข้อมูลได้ใน database/isc");
+
+        String objJSON = obj.toString();
         
         JSONObject noti = new JSONObject();
         noti.put("type", ClientEvents.NOTIFICATE.getString());
         noti.put("session_id",this.data.getSession_id());
-        noti.put("data",obj.toString());
+        noti.put("data",objJSON);
         
         this.messager.send(noti.toString());
     }
 
-    public void failRegister(){
+    public void failRegister() throws JMSException {
+        JSONObject obj = new JSONObject();
+        obj.put("status",2);
+        obj.put("title","Fail");
+        obj.put("detail","เช็ค รหัสลูกค้า และ เลขประจำตัวผู้เสียภาษี อีกครั้ง");
 
+        String objJSON = obj.toString();
+
+        JSONObject noti = new JSONObject();
+        noti.put("type", ClientEvents.NOTIFICATE.getString());
+        noti.put("session_id",this.data.getSession_id());
+        noti.put("data",objJSON);
+
+        this.messager.send(noti.toString());
     }
 }
