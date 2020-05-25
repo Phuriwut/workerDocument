@@ -47,6 +47,11 @@ public class workerManager {
                     workers.add(th);
                     System.out.println(this.workers.size());
                     th.start();
+                }else if (type.equals(ServerEvents.ORDERTODB.getString())){
+                    Thread th = new Thread(new OrderListSendDB(data,this.messager));
+                    workers.add(th);
+                    System.out.println(this.workers.size());
+                    th.start();
                 }
             } catch (JMSException e) {
                 e.printStackTrace();

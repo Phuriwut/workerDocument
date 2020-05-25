@@ -36,7 +36,7 @@ public class SheetWorkerSendDB extends Worker<Sheet> implements Runnable{
 
         data.setQNum("Q" + year_now + "/" + getNumberString());
 
-        PreparedStatement ppsm = database.preparedQuery("INSERT INTO `sheet`(`QNum`, `userID`, `date`, `enddate`, `day`, `salesman`) VALUES (?,?,?,?,?],?)");
+        PreparedStatement ppsm = database.preparedQuery("INSERT INTO `sheet`(`QNum`, `userID`, `date`, `enddate`, `day`, `salesman`) VALUES (?,?,?,?,?,?)");
         ppsm.setString(1,this.data.getQNum());
         ppsm.setString(2,this.data.getUserID());
         ppsm.setString(3,this.data.getDate());
