@@ -1,7 +1,7 @@
 package Worker.constance.events;
 
 public enum ServerEvents {
-    REGISTER("REGISTER"), ORDERTODB("ORDERTODB"), LOGOUT("LOGOUT"), SIGNUP("SIGNUP") ,
+    REGISTER("REGISTER"), ORDERTODB("ORDERTODB"), ORDER("ORDER"), SIGNUP("SIGNUP") ,
     SHEETTODB("SHEETTODB"),SHEET("SHEET");
 
     private String messageEvent;

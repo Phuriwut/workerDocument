@@ -2,7 +2,7 @@ package Server.constance.events;
 
 public enum ServerEvents {
     REGISTER("REGISTER"), LOGIN("LOGIN"), LOGOUT("LOGOUT"), SIGNUP("SIGNUP") ,
-    SHEET("SHEET");
+    SHEET("SHEET"),ORDERTODB("ORDERTODB"), ORDER("ORDER");
 
     private String messageEvent;
 
