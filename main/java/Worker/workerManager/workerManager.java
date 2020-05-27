@@ -38,7 +38,7 @@ public class workerManager {
                     System.out.println(this.workers.size());
                     th.start();
                 }else if (type.equals(ServerEvents.SHEETTODB.getString())){
-                    Thread th = new Thread(new SheetWorkerSendDB(data,this.messager));
+                    Thread th = new Thread(new SheetSendDB(data,this.messager));
                     workers.add(th);
                     System.out.println(this.workers.size());
                     th.start();

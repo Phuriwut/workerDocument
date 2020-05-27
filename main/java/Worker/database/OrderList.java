@@ -14,8 +14,11 @@ public class OrderList {
     private int Maintenance;
     private int Miscellneous;
     private String session_id;
+    private String note, condi;
 
-    public OrderList(String QNum, int seq, String list, int numList, int unitPrice, int price, int license, int customization, int maintenance, int miscellneous, String session_id) {
+    public OrderList(String QNum, int seq, String list, int numList, int unitPrice, int price,
+                     int license, int customization, int maintenance, int miscellneous,
+                     String session_id, String note, String condi) {
         this.QNum = QNum;
         this.seq = seq;
         this.list = list;
@@ -27,6 +30,8 @@ public class OrderList {
         this.Maintenance = maintenance;
         this.Miscellneous = miscellneous;
         this.session_id = session_id;
+        this.note = note;
+        this.condi= condi;
     }
 
     public String getQNum() { return QNum; }
@@ -73,19 +78,29 @@ public class OrderList {
 
     public void setSession_id(String session_id) { this.session_id = session_id; }
 
+    public String getNote() { return note; }
+
+    public void setNote(String note) { this.note = note; }
+
+    public String getCondi() { return condi; }
+
+    public void setCondi(String condi) { this.condi = condi; }
+
     @Override
     public String toString() {
         JSONObject obj = new JSONObject();
-        obj.put("QNum",QNum);
-        obj.put("seq",seq);
-        obj.put("list",list);
-        obj.put("numlist",numList);
-        obj.put("unitPrice",unitPrice);
-        obj.put("price",price);
-        obj.put("License",License);
-        obj.put("Customization",Customization);
-        obj.put("Maintenance",Maintenance);
-        obj.put("Miscellneous",Miscellneous);
+        obj.put("QNum",QNum); //Q2563/00001
+        obj.put("seq",seq);  //ลำดับ
+        obj.put("list",list); //รายการ
+        obj.put("numlist",numList); //จำนวนชิ้น
+        obj.put("unitPrice",unitPrice); //ราคาต่อหน่อย
+        obj.put("price",price); //ราคาทั้งหมดของชิ้นนั้น (numlist * unitprice)
+        obj.put("License",License); //เป็น license ?
+        obj.put("Customization",Customization); //เป็น cumtom ?
+        obj.put("Maintenance",Maintenance); // เป็น MA ?
+        obj.put("Miscellneous",Miscellneous); // เป็น Miscell ?
+        obj.put("note",note);  //หมายเหตุ
+        obj.put("condi",condi); //เงื่อนไข
         obj.put("session_id",session_id);
 
         return obj.toString();
