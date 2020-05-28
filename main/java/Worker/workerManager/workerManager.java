@@ -2,10 +2,12 @@ package Worker.workerManager;
 
 import Worker.constance.events.ServerEvents;
 import Worker.message.Messager;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.json.JSONObject;
 
 import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.TextMessage;
 import java.util.ArrayList;
 
 public class workerManager {
@@ -28,30 +30,35 @@ public class workerManager {
             try {
                 this.clearThread();
                 if(this.workers.size() >= 5) continue;
-                String newMessage = this.messager.recieve();
-                JsonObject objectFromString = jsonParser.parse(newMessage).getAsJsonObject();
-                String type = objectFromString.get("type").getAsString();
-                String data = objectFromString.get("data").getAsString();
+                Message message = this.messager.recieve();
+                TextMessage textMessage = (TextMessage) message;
+                String newMessage = textMessage.getText();
+
+                String sessionID = message.getStringProperty("session_id");
+                JSONObject objectFromString = new JSONObject(newMessage);
+
+                String type = objectFromString.getString("type");
+                JSONObject data = objectFromString.getJSONObject("data");
                 if(type.equals(ServerEvents.REGISTER.getString())){
-                    Thread th = new Thread(new RegisterWorker(data, this.messager));
+                    Thread th = new Thread(new RegisterWorker(data, this.messager, sessionID));
                     workers.add(th);
-                    System.out.println(this.workers.size());
+                    System.out.println(""+this.workers.size());
                     th.start();
-                }else if (type.equals(ServerEvents.SHEETTODB.getString())){
-                    Thread th = new Thread(new SheetSendDB(data,this.messager));
-                    workers.add(th);
-                    System.out.println(this.workers.size());
-                    th.start();
-               }else if(type.equals(ServerEvents.SHEET.getString())){
-                    Thread th = new Thread(new SheetWorker(data,this.messager));
-                    workers.add(th);
-                    System.out.println(this.workers.size());
-                    th.start();
-                }else if (type.equals(ServerEvents.ORDERTODB.getString())){
-                    Thread th = new Thread(new OrderListSendDB(data,this.messager));
-                    workers.add(th);
-                    System.out.println(this.workers.size());
-                    th.start();
+//                }else if (type.equals(ServerEvents.SHEETTODB.getString())){
+//                    Thread th = new Thread(new SheetSendDB(data,this.messager));
+//                    workers.add(th);
+//                    System.out.println(this.workers.size());
+//                    th.start();
+//               }else if(type.equals(ServerEvents.SHEET.getString())){
+//                    Thread th = new Thread(new SheetWorker(data,this.messager));
+//                    workers.add(th);
+//                    System.out.println(this.workers.size());
+//                    th.start();
+//                }else if (type.equals(ServerEvents.ORDERTODB.getString())){
+//                    Thread th = new Thread(new OrderListSendDB(data,this.messager));
+//                    workers.add(th);
+//                    System.out.println(this.workers.size());
+//                    th.start();
                 }
             } catch (JMSException e) {
                 e.printStackTrace();

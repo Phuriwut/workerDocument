@@ -3,13 +3,14 @@ package Server.dataextracter;
 import org.json.JSONObject;
 
 public class RegisterExtracter extends Extracter{
-    private String userID,taxID,nameContract;
+    private String userID,taxID,FirstnameContract,LastnameContract;
     private String numberPhone,nameConsumer,address;
 
-    public RegisterExtracter(String userID, String taxID, String nameContract, String numberPhone, String nameConsumer, String address) {
+    public RegisterExtracter(String userID, String taxID, String FirstnameContract, String LastnameContract, String numberPhone, String nameConsumer, String address) {
         this.userID = userID;
         this.taxID = taxID;
-        this.nameContract = nameContract;
+        this.FirstnameContract = FirstnameContract;
+        this.LastnameContract = LastnameContract;
         this.numberPhone = numberPhone;
         this.nameConsumer = nameConsumer;
         this.address = address;
@@ -23,9 +24,17 @@ public class RegisterExtracter extends Extracter{
 
     public void setTaxID(String taxID) { this.taxID = taxID; }
 
-    public String getNameContract() { return nameContract; }
+    public String getFirstnameContract() { return FirstnameContract; }
 
-    public void setNameContract(String nameContract) { this.nameContract = nameContract; }
+    public void setFirstnameContract(String firstnameContract) { FirstnameContract = firstnameContract; }
+
+    public String getLastnameContract() {
+        return LastnameContract;
+    }
+
+    public void setLastnameContract(String lastnameContract) {
+        LastnameContract = lastnameContract;
+    }
 
     public String getNumberPhone() { return numberPhone; }
 
@@ -44,7 +53,8 @@ public class RegisterExtracter extends Extracter{
         JSONObject obj = new JSONObject();
         obj.put("userID",userID);
         obj.put("taxID",taxID);
-        obj.put("nameContract",nameContract);
+        obj.put("FirstnameContract",FirstnameContract);
+        obj.put("LastnameContract",LastnameContract);
         obj.put("numberPhone",numberPhone);
         obj.put("nameConsumer",nameConsumer);
         obj.put("address",address);

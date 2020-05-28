@@ -5,26 +5,21 @@ import Worker.database.DBInstance;
 import Worker.message.Messager;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import org.json.JSONObject;
 
 import java.sql.SQLException;
 
-public class Worker<T> {
+public class Worker {
     String message;
     DBInstance database;
     Messager messager;
-    T data;
+    JSONObject data;
+    String sessionID;
 
-    Worker(Class<T> type, String message, Messager messanger){
+    Worker(JSONObject data, Messager messanger, String sessionID){
         this.messager = messanger;
-        this.message = message;
-        System.out.println(this.message);
-        Gson gson = new Gson();
-        try {
-            this.data = (T) gson.fromJson(this.message, type);
-        }catch (JsonSyntaxException e) {
-            e.printStackTrace();
-        }
-
+        this.data = data;
+        this.sessionID = sessionID;
         try {
             this.database = DB.getInstance();
         } catch (SQLException throwables) {
