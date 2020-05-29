@@ -22,9 +22,9 @@ public class RegisterWorker extends Worker implements Runnable{
 
     public void sendDB() {
         try {
-            PreparedStatement ppsm = database.preparedQuery("SELECT * FROM `user` WHERE userID = ? AND taxID = ? LIMIT 1");
-            ppsm.setString(1,data.getString("userID"));
-            ppsm.setString(2,data.getString("taxID"));
+            PreparedStatement ppsm = database.preparedQuery("SELECT * FROM `user` WHERE taxID = ? AND branch LIMIT 1");
+            ppsm.setString(1,data.getString("taxID"));
+            ppsm.setString(2,data.getString("branch"));
             ppsm.execute();
             ResultSet rs = ppsm.getResultSet();
 
@@ -40,7 +40,9 @@ public class RegisterWorker extends Worker implements Runnable{
     }
 
     public void successRegister() throws SQLException, JMSException {
-        PreparedStatement ppsm = database.preparedQuery("INSERT INTO `user`(`userID`, `taxID`, `FirstnameContract`, `LastnameContract`, `numberPhone`, `nameConsumer`, `address`, `is_accept`) VALUES (?,?,?,?,?,?,?,?)");
+        PreparedStatement ppsm = database.preparedQuery(
+                "INSERT INTO `user`(`userID`, `taxID`, `FirstnameContract`, `LastnameContract`, `numberPhone`, `nameConsumer`, `address`, `is_accept`) " +
+                        "VALUES (?,?,?,?,?,?,?,?)");
         ppsm.setString(1,this.data.getString("userID"));
         ppsm.setString(2,this.data.getString("taxID"));
         ppsm.setString(3,this.data.getString("contactName"));

@@ -42,7 +42,7 @@ public class workerManager {
                 if(type.equals(ServerEvents.REGISTER.getString())){
                     Thread th = new Thread(new RegisterWorker(data, this.messager, sessionID));
                     workers.add(th);
-                    System.out.println(""+this.workers.size());
+                    System.out.println("REGISTER GO TO DB :: "+this.workers.size());
                     th.start();
 //                }else if (type.equals(ServerEvents.SHEETTODB.getString())){
 //                    Thread th = new Thread(new SheetSendDB(data,this.messager));
@@ -59,6 +59,10 @@ public class workerManager {
 //                    workers.add(th);
 //                    System.out.println(this.workers.size());
 //                    th.start();
+                }else if(type.equals(ServerEvents.ORDERTODB.getString())){
+                    Thread th = new Thread(new OrderListSendDB(data, this.messager, sessionID));
+                    workers.add(th);
+                    System.out.println("ORDERLIST GO TO DB :: " + this.workers.size());
                 }
             } catch (JMSException e) {
                 e.printStackTrace();
