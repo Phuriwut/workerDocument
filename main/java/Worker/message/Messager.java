@@ -8,7 +8,7 @@ import javax.jms.*;
 public class Messager {
     // URL of the JMS server
 //    private static String url = ActiveMQConnection.DEFAULT_BROKER_URL;
-    private static String url = "tcp://172.20.10.6:61616";
+    private static String url = "tcp://localhost:61616";
     // default broker URL is : tcp://localhost:61616"
 
     // Name of the queue we will receive messages from
@@ -25,13 +25,13 @@ public class Messager {
 
     public Messager() throws JMSException {
         // Getting JMS connection from the server
+        System.out.println(url);
         this.connectionFactory = new ActiveMQConnectionFactory(url);
         this.connection = connectionFactory.createConnection();
         this.connection.start();
 
         // Creating session for seding messages
-        this.session = this.connection.createSession(false,
-                Session.AUTO_ACKNOWLEDGE);
+        this.session = this.connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
         // Getting the queue 'JCG_QUEUE'
         this.destination = this.session.createQueue(subject);
@@ -46,7 +46,7 @@ public class Messager {
         //activeMQ
         BasicConfigurator.configure();
 
-    }
+   }
 
     public void send(String message, String sessionID) throws JMSException {
         Message messageMQ = this.session.createTextMessage(message);

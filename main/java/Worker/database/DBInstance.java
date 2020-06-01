@@ -4,6 +4,11 @@ import java.sql.*;
 
 public class DBInstance {
     Connection con;
+
+    public Connection getCon() {
+        return con;
+    }
+
     Statement stmt;
 
     DBInstance() throws SQLException, ClassNotFoundException {

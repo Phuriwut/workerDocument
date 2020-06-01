@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class workerManager {
     static ArrayList<Thread> workers = new ArrayList<Thread>();
     Messager messager;
-    private static int WORKER_NUMBER = 5;
+    private static int WORKER_NUMBER = 10;
     private static int no = 0;
 
     public workerManager(){
@@ -29,7 +29,7 @@ public class workerManager {
         while(true){
             try {
                 this.clearThread();
-                if(this.workers.size() >= 5) continue;
+                if(this.workers.size() >= 10) continue;
                 Message message = this.messager.recieve();
                 TextMessage textMessage = (TextMessage) message;
                 String newMessage = textMessage.getText();
@@ -44,11 +44,11 @@ public class workerManager {
                     workers.add(th);
                     System.out.println("REGISTER GO TO DB :: "+this.workers.size());
                     th.start();
-//                }else if (type.equals(ServerEvents.SHEETTODB.getString())){
-//                    Thread th = new Thread(new SheetSendDB(data,this.messager));
-//                    workers.add(th);
-//                    System.out.println(this.workers.size());
-//                    th.start();
+                }else if (type.equals(ServerEvents.SHEETTODB.getString())){
+                    Thread th = new Thread(new SheetSendDB(data,this.messager, sessionID));
+                    workers.add(th);
+                    System.out.println(this.workers.size());
+                    th.start();
 //               }else if(type.equals(ServerEvents.SHEET.getString())){
 //                    Thread th = new Thread(new SheetWorker(data,this.messager));
 //                    workers.add(th);
