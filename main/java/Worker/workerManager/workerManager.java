@@ -63,6 +63,12 @@ public class workerManager {
                     Thread th = new Thread(new OrderListSendDB(data, this.messager, sessionID));
                     workers.add(th);
                     System.out.println("ORDERLIST GO TO DB :: " + this.workers.size());
+                    th.start();
+                }else if(type.equals(ServerEvents.GET_USER_LIST.getString())){
+                    Thread th = new Thread(new UserListWorker(data,this.messager,sessionID));
+                    workers.add(th);
+                    th.start();
+                    System.out.println("userlistWorker");
                 }
             } catch (JMSException e) {
                 e.printStackTrace();
