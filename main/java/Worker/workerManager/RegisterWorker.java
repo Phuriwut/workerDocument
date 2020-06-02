@@ -1,5 +1,6 @@
 package Worker.workerManager;
 
+import Worker.constance.events.ClientEvents;
 import Worker.message.Messager;
 import org.json.JSONObject;
 
@@ -53,21 +54,26 @@ public class RegisterWorker extends Worker implements Runnable{
         obj.put("title","Success");
         obj.put("detail","สามารถตรวจสอบข้อมูลได้ใน database/isc");
 
-        String objJSON = obj.toString();
+        JSONObject senddata = new JSONObject();
+        senddata.put("type",ClientEvents.NOTIFICATE.getString());
+        senddata.put("data",obj);
         
-        this.messager.send(objJSON,this.sessionID);
+        this.messager.send(senddata.toString(),this.sessionID);
     }
 
     public void failRegister() {
         JSONObject obj = new JSONObject();
         obj.put("status",2);
         obj.put("title","Fail");
-        obj.put("detail","เช็ค รหัสลูกค้า และ เลขประจำตัวผู้เสียภาษี อีกครั้ง");
+        obj.put("detail","เช็ค เลขประจำตัวผู้เสียภาษี และ สาขา อีกครั้ง");
+        obj.put("type",ClientEvents.NOTIFICATE.getString());
 
-        String objJSON = obj.toString();
+        JSONObject sendata = new JSONObject();
+        sendata.put("type", ClientEvents.NOTIFICATE.toString());
+        sendata.put("data",obj);
 
         try {
-            this.messager.send(objJSON,this.sessionID);
+            this.messager.send(sendata.toString(),this.sessionID);
         } catch (JMSException e) {
             e.printStackTrace();
         }

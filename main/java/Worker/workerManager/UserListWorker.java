@@ -1,5 +1,6 @@
 package Worker.workerManager;
 
+import Worker.constance.events.ClientEvents;
 import Worker.message.Messager;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,10 +42,15 @@ public class UserListWorker extends Worker implements Runnable{
             array.put(obj);
         }
         JSONObject sendObj = new JSONObject();
-        sendObj.put("data",array);
+        sendObj.put("userList",array);
+
+
+        JSONObject sendClient = new JSONObject();
+        sendClient.put("type", ClientEvents.RECEIVE_USER_LIST.toString());
+        sendClient.put("data",sendObj);
 
         try {
-            this.messager.send(sendObj.toString(),this.sessionID);
+            this.messager.send(sendClient.toString(),this.sessionID);
         } catch (JMSException e) {
             e.printStackTrace();
         }

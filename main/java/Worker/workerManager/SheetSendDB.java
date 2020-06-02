@@ -30,7 +30,11 @@ public class SheetSendDB extends Worker implements Runnable{
 
     public void successSheet() throws SQLException, JMSException {
         PreparedStatement ppsm = this.database.getCon().prepareStatement("INSERT INTO `sheet` (year, year_num, user_id, date, enddate, day, salesman) " +
-                "SELECT YEAR(CURRENT_DATE)+543 AS year, COUNT(*) + 1 AS year_num, ? AS user_id, ? AS date, ? AS enddate, ? AS day, ? AS salesman FROM sheet WHERE year = YEAR(CURRENT_DATE)+543", Statement.RETURN_GENERATED_KEYS);
+                "SELECT YEAR(CURRENT_DATE)+543 AS year,( CASE WHEN MAX(year_num) IS NULL" +
+                "    THEN 1" +
+                "        ELSE MAX(year_num) + 1" +
+                "    END )" +
+                "    AS year_num , ? AS user_id, ? AS date, ? AS enddate, ? AS day, ? AS salesman FROM sheet WHERE year = YEAR(CURRENT_DATE)+543", Statement.RETURN_GENERATED_KEYS);
 //        PreparedStatement ppsm = database.preparedQuery("INSERT INTO `sheet` (year, year_num, user_id, date, enddate, day, salesman) " +
 //                "SELECT YEAR(CURRENT_DATE)+543 AS year, COUNT(*) + 1 AS year_num, ? AS user_id, ? AS date, ? AS enddate, ? AS day, ? AS salesman FROM sheet WHERE year = YEAR(CURRENT_DATE)+543");
         ppsm.setInt(1,this.data.getInt("user_id"));
@@ -41,16 +45,25 @@ public class SheetSendDB extends Worker implements Runnable{
         ppsm.executeUpdate();
         ResultSet rs = ppsm.getGeneratedKeys();
         rs.next();
-        int year = rs.getInt("year");
-        int year_num = rs.getInt("year_num");
-        int sheet_id = rs.getInt("sheet_id");
+        int sheetID = rs.getInt(1);
+        System.out.println(sheetID);
 
-        JSONObject userGetQNum = new JSONObject();
-        userGetQNum.put("year",year);
-        userGetQNum.put("year_num",year_num);
-        userGetQNum.put("sheet_id",sheet_id);
-        userGetQNum.put("type", ClientEvents.SHEET_RECEIVE.getString());
+        sendQNum();
+    }
 
-        this.messager.send(userGetQNum.toString(),sessionID);
+    public void sendQNum() throws SQLException, JMSException {
+        PreparedStatement ppsm = this.database.preparedQuery("SELECT * FROM `sheet`LIMIT 1");
+        ppsm.execute();
+
+        JSONObject userEventData = new JSONObject();
+        userEventData.put("year","year");
+        userEventData.put("year_num","year_num");
+        userEventData.put("sheet_id","sheet_id");
+
+        JSONObject sendData = new JSONObject();
+        sendData.put("type",ClientEvents.SHEET_RECEIVE.getString());
+        sendData.put("data",userEventData.toString());
+
+        this.messager.send(sendData.toString(),sessionID);
     }
 }

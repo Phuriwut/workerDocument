@@ -47,13 +47,13 @@ public class workerManager {
                 }else if (type.equals(ServerEvents.SHEETTODB.getString())){
                     Thread th = new Thread(new SheetSendDB(data,this.messager, sessionID));
                     workers.add(th);
-                    System.out.println(this.workers.size());
+                    System.out.println("SHEET_TO_DB :: "+this.workers.size());
                     th.start();
-//               }else if(type.equals(ServerEvents.SHEET.getString())){
-//                    Thread th = new Thread(new SheetWorker(data,this.messager));
-//                    workers.add(th);
-//                    System.out.println(this.workers.size());
-//                    th.start();
+               }else if(type.equals(ServerEvents.SHEET.getString())){
+                    Thread th = new Thread(new SheetWorker(data,this.messager, sessionID));
+                    workers.add(th);
+                    System.out.println("SHEET_TO_CLIENT :: "+this.workers.size());
+                    th.start();
 //                }else if (type.equals(ServerEvents.ORDERTODB.getString())){
 //                    Thread th = new Thread(new OrderListSendDB(data,this.messager));
 //                    workers.add(th);
@@ -62,7 +62,7 @@ public class workerManager {
                 }else if(type.equals(ServerEvents.ORDERTODB.getString())){
                     Thread th = new Thread(new OrderListSendDB(data, this.messager, sessionID));
                     workers.add(th);
-                    System.out.println("ORDERLIST GO TO DB :: " + this.workers.size());
+                    System.out.println("ORDERLIST_TO_DB :: " + this.workers.size());
                     th.start();
                 }else if(type.equals(ServerEvents.GET_USER_LIST.getString())){
                     Thread th = new Thread(new UserListWorker(data,this.messager,sessionID));
