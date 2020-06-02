@@ -1,8 +1,10 @@
 package Worker.workerManager;
 
+import Worker.constance.events.ClientEvents;
 import Worker.message.Messager;
 import org.json.JSONObject;
 
+import javax.jms.JMSException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,23 +18,24 @@ public class DataWorker extends Worker implements Runnable{
     public void run() {
         try {
             sendCliend();
-        } catch (SQLException throwables) {
+        } catch (SQLException | JMSException throwables) {
             throwables.printStackTrace();
         }
     }
 
-    public void sendCliend() throws SQLException {
+    public void sendCliend() throws SQLException, JMSException {
         PreparedStatement ppsm = this.database.preparedQuery("SELECT * FROM `sheet` " +
                 "INNER JOIN `user` ON sheet.user_id = user.user_id" +
                 "INNER JOIN `orderlist` ON sheet.sheet_id = orderlist.sheet_id" +
                 "LIMIT 1");
-        ppsm.execute();
 
         ResultSet rs = ppsm.getResultSet();
 
         if (!rs.next()){
+            failStatus();
             return;
         }
+        sendDataAll(rs);
     }
 
     public void sendDataAll(ResultSet rs) throws SQLException {
@@ -64,5 +67,21 @@ public class DataWorker extends Worker implements Runnable{
         userEventData.put("Miscellneous",rs.getString("Miscellneous"));
         userEventData.put("note",rs.getString("note"));
         userEventData.put("condi",rs.getString("condi"));
+
+        JSONObject sendData = new JSONObject();
+        sendData.put("type","");
+    }
+
+    public void failStatus() throws JMSException {
+        JSONObject noti = new JSONObject();
+        noti.put("status",2);
+        noti.put("title","Error");
+        noti.put("detail","ไม่สามารถส่งข้อมูลได้ ตรวจสอบความถูกต้องอีกครั้ง");
+
+        JSONObject obj = new JSONObject();
+        obj.put("type", ClientEvents.NOTIFICATE.toString());
+        obj.put("data",noti);
+
+        this.messager.send(obj.toString(),sessionID);
     }
 }

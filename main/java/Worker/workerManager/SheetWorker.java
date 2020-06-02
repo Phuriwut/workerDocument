@@ -24,7 +24,6 @@ public class SheetWorker extends Worker implements Runnable{
         try {
             PreparedStatement ppsm = database.preparedQuery("SELECT * FROM `sheet` WHERE sheet_id = ? LIMIT 1");
             ppsm.setInt(1,data.getInt("sheet_id"));
-            ppsm.execute();
 
             ResultSet rs = ppsm.getResultSet();
 

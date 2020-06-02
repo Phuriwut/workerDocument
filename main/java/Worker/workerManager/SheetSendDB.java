@@ -46,23 +46,26 @@ public class SheetSendDB extends Worker implements Runnable{
         ResultSet rs = ppsm.getGeneratedKeys();
         rs.next();
         int sheetID = rs.getInt(1);
-        System.out.println(sheetID);
+//        System.out.println(sheetID);
 
-        sendQNum();
+        sendQNum(sheetID);
     }
 
-    public void sendQNum() throws SQLException, JMSException {
-        PreparedStatement ppsm = this.database.preparedQuery("SELECT * FROM `sheet`LIMIT 1");
-        ppsm.execute();
+    public void sendQNum(int sheet_id) throws SQLException, JMSException {
+        PreparedStatement ppsm = this.database.preparedQuery("SELECT year, year_num FROM `sheet` WHERE sheet_id = ? LIMIT 1");
+        ppsm.setInt(1,sheet_id);
+
+        ResultSet rsData = ppsm.executeQuery();
+        rsData.next();
 
         JSONObject userEventData = new JSONObject();
-        userEventData.put("year","year");
-        userEventData.put("year_num","year_num");
-        userEventData.put("sheet_id","sheet_id");
+        userEventData.put("year",rsData.getInt("year"));
+        userEventData.put("year_num",rsData.getInt("year_num"));
+        userEventData.put("sheet_id",sheet_id);
 
         JSONObject sendData = new JSONObject();
         sendData.put("type",ClientEvents.SHEET_RECEIVE.getString());
-        sendData.put("data",userEventData.toString());
+        sendData.put("data",userEventData);
 
         this.messager.send(sendData.toString(),sessionID);
     }
