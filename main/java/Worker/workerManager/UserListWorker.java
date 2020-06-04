@@ -23,7 +23,6 @@ public class UserListWorker extends Worker implements Runnable{
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        System.out.println();
     }
 
     public void sendClient() throws SQLException {

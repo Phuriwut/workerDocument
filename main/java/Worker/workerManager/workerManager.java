@@ -33,6 +33,7 @@ public class workerManager {
                 Message message = this.messager.recieve();
                 TextMessage textMessage = (TextMessage) message;
                 String newMessage = textMessage.getText();
+                System.out.println(newMessage);
 
                 String sessionID = message.getStringProperty("session_id");
                 JSONObject objectFromString = new JSONObject(newMessage);
@@ -49,16 +50,6 @@ public class workerManager {
                     workers.add(th);
                     System.out.println("SHEET_TO_DB :: "+this.workers.size());
                     th.start();
-               }else if(type.equals(ServerEvents.SHEET.getString())){
-                    Thread th = new Thread(new SheetWorker(data,this.messager, sessionID));
-                    workers.add(th);
-                    System.out.println("SHEET_TO_CLIENT :: "+this.workers.size());
-                    th.start();
-//                }else if (type.equals(ServerEvents.ORDERTODB.getString())){
-//                    Thread th = new Thread(new OrderListSendDB(data,this.messager));
-//                    workers.add(th);
-//                    System.out.println(this.workers.size());
-//                    th.start();
                 }else if(type.equals(ServerEvents.ORDERTODB.getString())){
                     Thread th = new Thread(new OrderListSendDB(data, this.messager, sessionID));
                     workers.add(th);
@@ -69,8 +60,25 @@ public class workerManager {
                     workers.add(th);
                     th.start();
                     System.out.println("userlistWorker");
+                }else if(type.equals(ServerEvents.GET_SHEET_LIST.getString())){
+                    Thread th = new Thread(new SheetListWorker(data,this.messager,sessionID));
+                    workers.add(th);
+                    th.start();
+                    System.out.println("sheetListWorker");
+                }else if (type.equals(ServerEvents.GET_ORDER_LIST.getString())){
+                    Thread th = new Thread(new OrderListWorker(data,this.messager,sessionID));
+                    workers.add(th);
+                    th.start();
+                    System.out.println("orderListWorker");
+                }else if (type.equals(ServerEvents.DELETE_ORDER_LIST.getString())){
+                    Thread th = new Thread(new OrderListDeleteWorker(data,this.messager,sessionID));
+                    workers.add(th);
+                    th.start();
+                    System.out.println("orderListDeletedWorker");
                 }
             } catch (JMSException e) {
+                e.printStackTrace();
+            }catch (Exception e){
                 e.printStackTrace();
             }
         }

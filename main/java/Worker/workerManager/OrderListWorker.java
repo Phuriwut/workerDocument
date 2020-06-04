@@ -3,6 +3,7 @@ package Worker.workerManager;
 import Worker.constance.events.ClientEvents;
 import Worker.database.OrderList;
 import Worker.message.Messager;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.jms.JMSException;
@@ -19,74 +20,45 @@ public class OrderListWorker extends Worker implements Runnable{
 
     @Override
     public void run() {
-        checkDB();
-    }
-
-    public void checkDB(){
         try {
-            PreparedStatement ppsm = database.preparedQuery("SELECT * FROM `orderlist` WHERE QNum = ? LIMIT 1");
-            ppsm.setString(1,data.getString("QNum"));
-            ppsm.execute();
-
-            ResultSet rs = ppsm.getResultSet();
-
-            if (!rs.next()){
-                notFoundHandler();
-                return;
-            }
-            FoundHandler(rs);
-
-        } catch (SQLException | JMSException throwables) {
-            throwables.printStackTrace();
+            sendOrderList();
+        } catch (SQLException | JMSException e) {
+            e.printStackTrace();
         }
     }
 
-    public void notFoundHandler() throws JMSException {
-        JSONObject userEventData = new JSONObject();
-        userEventData.put("status",2);
-        userEventData.put("detail","ตรวจสอบรหัสลูกค้าอีกครั้ง หรือ\nสามารถหาข้อมูลเพิ่มเติมจาก database/isc ");
-        userEventData.put("title","รหัสลูกค้าไม่ถูกต้อง");
+    public void sendOrderList() throws SQLException, JMSException {
+        PreparedStatement ppsm = this.database.preparedQuery("SELECT * FROM `orderlist` WHERE `sheet_id` = ? ");
+        ppsm.setInt(1,data.getInt("sheet_id"));
+        ppsm.execute();
 
-        String userEventDataJSON = userEventData.toString();
+        ResultSet rs = ppsm.getResultSet();
 
-//        JSONObject workerToSocketData = new JSONObject();
-//        workerToSocketData.put("type", ClientEvents.NOTIFICATE.getString());
-//        workerToSocketData.put("session_id",this.data.getSession_id());
-//        workerToSocketData.put("data",userEventDataJSON);
-//
-//        this.messager.send(workerToSocketData.toString());
+        JSONArray array = new JSONArray();
 
-        System.out.println("OrderListWorker ::: " + userEventDataJSON);
-        this.messager.send(userEventDataJSON,this.sessionID);
-    }
+        while (rs.next()) {
+            JSONObject userEventData = new JSONObject();
+            userEventData.put("sheet_id", rs.getString("sheet_id"));
+            userEventData.put("list", rs.getString("list"));
+            userEventData.put("amount", rs.getInt("amount"));
+            userEventData.put("pricePerUnit", rs.getInt("unitPrice"));
+            userEventData.put("cost", rs.getInt("cost"));
+            userEventData.put("type", rs.getInt("type"));
+            userEventData.put("note", rs.getString("note"));
+            userEventData.put("condi", rs.getString("condi"));
+            userEventData.put("order_id", rs.getInt("order_id"));
+//            userEventData.put("junior",rs.getString(database));
+            array.put(userEventData);
+        }
 
-    public void FoundHandler(ResultSet rs) throws SQLException, JMSException {
-        JSONObject userEventData = new JSONObject();
-        userEventData.put("QNum",rs.getString("QNum"));
-        userEventData.put("seq",rs.getInt("seq"));
-        userEventData.put("list",rs.getString("list"));
-        userEventData.put("numlist",rs.getInt("numlist"));
-        userEventData.put("unitPrice",rs.getInt("unitPrice"));
-        userEventData.put("price",rs.getInt("price"));
-        userEventData.put("License",rs.getInt("License"));
-        userEventData.put("Customization",rs.getInt("Customization"));
-        userEventData.put("Maintenance",rs.getInt("Maintenance"));
-        userEventData.put("Miscellneous",rs.getInt("Miscellneous"));
-        userEventData.put("note",rs.getString("note"));
-        userEventData.put("condi",rs.getString("condi"));
-//        userEventData.put("junior",rs.getString(database));
+        JSONObject sendData = new JSONObject();
+        sendData.put("list",array);
 
-        String userEventDataJSON = userEventData.toString();
+        JSONObject sendClient = new JSONObject();
+        sendClient.put("type",ClientEvents.RECEIVE_ORDER_LIST.toString());
+        sendClient.put("data",sendData);
 
-//        JSONObject workerToSocketData = new JSONObject();
-//        workerToSocketData.put("type",ClientEvents.ORDER_RECEIVE.getString());
-//        workerToSocketData.put("session_id",this.data.getSession_id());
-//        workerToSocketData.put("data",userEventDataJSON);
-//
-//        System.out.println(workerToSocketData);
-//        this.messager.send(workerToSocketData.toString());
-
-        System.out.println("OrderListWorker ::: " + userEventDataJSON);
-        this.messager.send(userEventDataJSON,this.sessionID);
+        System.out.println("Order_List_Worker ::: " + sendClient.toString());
+        this.messager.send(sendClient.toString(),this.sessionID);
     }
 }

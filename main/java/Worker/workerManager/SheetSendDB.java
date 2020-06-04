@@ -67,6 +67,6 @@ public class SheetSendDB extends Worker implements Runnable{
         sendData.put("type",ClientEvents.SHEET_RECEIVE.getString());
         sendData.put("data",userEventData);
 
-        this.messager.send(sendData.toString(),sessionID);
+        this.messager.send(sendData.toString(),this.sessionID);
     }
 }
