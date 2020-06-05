@@ -59,22 +59,42 @@ public class workerManager {
                     Thread th = new Thread(new UserListWorker(data,this.messager,sessionID));
                     workers.add(th);
                     th.start();
-                    System.out.println("userlistWorker");
+                    System.out.println("==> userlistWorker");
                 }else if(type.equals(ServerEvents.GET_SHEET_LIST.getString())){
                     Thread th = new Thread(new SheetListWorker(data,this.messager,sessionID));
                     workers.add(th);
                     th.start();
-                    System.out.println("sheetListWorker");
+                    System.out.println("==> sheetListWorker");
                 }else if (type.equals(ServerEvents.GET_ORDER_LIST.getString())){
                     Thread th = new Thread(new OrderListWorker(data,this.messager,sessionID));
                     workers.add(th);
                     th.start();
-                    System.out.println("orderListWorker");
+                    System.out.println("==> orderListWorker");
+                }else if (type.equals(ServerEvents.EDIT_SHEET_LIST.getString())){
+                    Thread th =new Thread(new SheetUpdateWorker(data,this.messager,sessionID));
+                    workers.add(th);
+                    th.start();
+                    System.out.println("==> sheetUpdateWorker");
                 }else if (type.equals(ServerEvents.DELETE_ORDER_LIST.getString())){
                     Thread th = new Thread(new OrderListDeleteWorker(data,this.messager,sessionID));
                     workers.add(th);
                     th.start();
-                    System.out.println("orderListDeletedWorker");
+                    System.out.println("==> orderListDeletedWorker");
+                }else if (type.equals(ServerEvents.EDIT_ORDER_LIST.getString())){
+                    Thread th = new Thread(new OrderListUpdateWorker(data,this.messager,sessionID));
+                    workers.add(th);
+                    th.start();
+                    System.out.println("==> orderListUpdateWorker");
+                }else if (type.equals(ServerEvents.GET_SHEET_ALL_DATA.getString())){
+                    Thread th = new Thread(new DataWorker(data,this.messager,sessionID));
+                    workers.add(th);
+                    th.start();
+                    System.out.println("==> sendALLDataWorker");
+                }else if (type.equals(ServerEvents.GET_SHEET_BILL_LIST.getString())){
+                    Thread th = new Thread(new SheetBillSendDB(data,this.messager,sessionID));
+                    workers.add(th);
+                    th.start();
+                    System.out.println("==> sheet_Bill_TO_DB" + workers.size());
                 }
             } catch (JMSException e) {
                 e.printStackTrace();

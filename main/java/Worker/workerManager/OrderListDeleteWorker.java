@@ -2,12 +2,10 @@ package Worker.workerManager;
 
 import Worker.constance.events.ClientEvents;
 import Worker.message.Messager;
-import akka.stream.Client;
 import org.json.JSONObject;
 
 import javax.jms.JMSException;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class OrderListDeleteWorker extends Worker implements Runnable{
@@ -25,7 +23,7 @@ public class OrderListDeleteWorker extends Worker implements Runnable{
     }
 
     public void listDeleted() throws SQLException, JMSException {
-        PreparedStatement ppsm = this.database.preparedQuery("DELETE FROM `orderlist` WHERE order_id = ? ;");
+        PreparedStatement ppsm = this.database.preparedQuery("DELETE FROM `orderlist` WHERE order_id = ? ");
         ppsm.setInt(1,this.data.getInt("order_id"));
         ppsm.execute();
 

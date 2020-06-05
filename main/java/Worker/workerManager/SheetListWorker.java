@@ -26,7 +26,7 @@ public class SheetListWorker extends Worker implements Runnable{
 
     public void sendList() throws SQLException{
         PreparedStatement ppsm = this.database.preparedQuery("SELECT `sheet_id`, `year`, `year_num`, `date`" +
-                "FROM `sheet`");
+                "FROM `sheet` ORDER BY `sheet_id` DESC ");
         ppsm.execute();
 
         ResultSet rs = ppsm.getResultSet();
