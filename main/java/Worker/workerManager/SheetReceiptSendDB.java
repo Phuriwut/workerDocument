@@ -86,7 +86,7 @@ public class SheetReceiptSendDB extends Worker implements Runnable{
         sendObject.put("list",array);
 
         JSONObject sendData = new JSONObject();
-        sendData.put("type",ClientEvents.RECEIVE_SHEET_BILL_LIST.toString());
+        sendData.put("type",ClientEvents.RECEIVE_SHEET_RECEIPT_LIST.toString());
         sendData.put("data",sendObject);
 
         this.messager.send(sendData.toString(),this.sessionID);

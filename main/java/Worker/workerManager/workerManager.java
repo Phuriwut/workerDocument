@@ -59,11 +59,6 @@ public class workerManager {
                     workers.add(th);
                     th.start();
                     System.out.println("==> userlistWorker");
-                }else if(type.equals(ServerEvents.GET_SHEET_LIST.getString())){
-                    Thread th = new Thread(new SheetListWorker(data,this.messager,sessionID));
-                    workers.add(th);
-                    th.start();
-                    System.out.println("==> sheetListWorker");
                 }else if (type.equals(ServerEvents.GET_ORDER_LIST.getString())){
                     Thread th = new Thread(new OrderListWorker(data,this.messager,sessionID));
                     workers.add(th);
@@ -89,11 +84,16 @@ public class workerManager {
                     workers.add(th);
                     th.start();
                     System.out.println("==> sendALLDataWorker");
-                }else if (type.equals(ServerEvents.GET_SHEET_BILL_LIST.getString())){
+                }else if (type.equals(ServerEvents.SHEET_BILL_TO_DB.getString())){
                     Thread th = new Thread(new SheetBillSendDB(data,this.messager,sessionID));
                     workers.add(th);
                     th.start();
-                    System.out.println("==> sheet_Bill_TO_DB" + workers.size());
+                    System.out.println("==> SHEET_BILL_TO_DB :: " + this.workers.size());
+                }else if (type.equals(ServerEvents.SHEET_RECEIPT_TO_DB.getString())){
+                    Thread th = new Thread(new SheetReceiptSendDB(data,this.messager,sessionID));
+                    workers.add(th);
+                    th.start();
+                    System.out.println("==> SHEET_RECEIPT_TO_DB :: " + this.workers.size());
                 }else if (type.equals(ServerEvents.GET_EDIT_REGISTER.getString())){
                     Thread th = new Thread(new EditRegisterWorker(data,this.messager,sessionID));
                     workers.add(th);
