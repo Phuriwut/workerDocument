@@ -70,7 +70,6 @@ public class DataWorker extends Worker implements Runnable{
                 "list, " +
                 "amount, " +
                 "unitPrice, " +
-                "cost, " +
                 "type, " +
                 "order_id FROM `orderlist` WHERE sheet_id = ? ");
         ppsm2.setInt(1,this.data.getInt("sheet_id"));
@@ -85,7 +84,6 @@ public class DataWorker extends Worker implements Runnable{
             userOrderData.put("list", rs2.getString("list"));
             userOrderData.put("amount", rs2.getInt("amount"));
             userOrderData.put("pricePerUnit", rs2.getInt("unitPrice"));
-            userOrderData.put("cost", rs2.getInt("cost"));
             userOrderData.put("type", rs2.getInt("type"));
             userOrderData.put("order_id", rs2.getInt("order_id"));
             array.put(userOrderData);

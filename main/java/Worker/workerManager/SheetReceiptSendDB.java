@@ -11,31 +11,31 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class SheetBillSendDB extends Worker implements Runnable{
-    SheetBillSendDB(JSONObject data, Messager messanger, String sessionID) {
+public class SheetReceiptSendDB extends Worker implements Runnable{
+    SheetReceiptSendDB(JSONObject data, Messager messanger, String sessionID) {
         super(data, messanger, sessionID);
     }
 
     @Override
     public void run() {
         try {
-            successSheet();
+            success();
         } catch (JMSException | SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void successSheet() throws SQLException, JMSException {
-        PreparedStatement ppsm = this.database.getCon().prepareStatement("INSERT INTO `sheetbill` " +
+    public void success() throws SQLException, JMSException {
+        PreparedStatement ppsm = this.database.getCon().prepareStatement("INSERT INTO `sheetreceipt` " +
                 "(`year`, `year_num`, `refer_year`, `refer_year_num`, `date`, `salesman`, `note`, `day`) " +
-                "SELECT YEAR(CURRENT_DATE)+543 AS year,( CASE WHEN MAX(year_num) IS NULL " +
+                "SELECT YEAR(CURRENT_DATE)+543 AS year, (CASE WHEN MAX(year_num) IS NULL " +
                 "THEN 1 " +
                 "ELSE MAX(year_num) + 1 " +
                 "END " +
-                "AS year_num , sheet.year AS refer_year, sheet.year_num AS refer_year_num, " +
-                "? AS date, ? AS salesman, ? AS note, ? AS day FROM `sheet` " +
-                "WHERE sheet_id = ? LIMIT 1", Statement.RETURN_GENERATED_KEYS);
-        ppsm.setInt(5,this.data.getInt("sheet_id"));
+                "As year_num ,sheetbill.year AS refer_year, sheetbill.year_num AS refer_year_num, " +
+                "? AS date, ? AS salesman, ? AS note, ? AS day FROM `sheetbill` " +
+                "WHERE sheet_bill_id = ? LIMIT 1", Statement.RETURN_GENERATED_KEYS);
+        ppsm.setInt(5,this.data.getInt("sheet_bill_id"));
         ppsm.setString(1,this.data.getString("date"));
         ppsm.setString(2,this.data.getString("salesman"));
         ppsm.setString(3,this.data.getString("note"));
@@ -44,32 +44,29 @@ public class SheetBillSendDB extends Worker implements Runnable{
         ResultSet rs = ppsm.getGeneratedKeys();
         rs.next();
         int sheetID = rs.getInt(1);
-        sendIVNum(sheetID);
+        sendTIVNum(sheetID);
         sendList();
     }
 
-    public void sendIVNum(int sheetID) throws SQLException, JMSException {
-        PreparedStatement ppsm = this.database.preparedQuery("SELECT year, year_num FROM `sheetbill` WHERE sheet_bill_id = ? LIMIT 1");
+    public void sendTIVNum(int sheetID) throws SQLException {
+        PreparedStatement ppsm = this.database.preparedQuery("SELECT `year`, `year_num` FROM `sheetreceipt` WHERE sheet_receipt_id = ? LIMIT 1");
         ppsm.setInt(1,sheetID);
 
         ResultSet rsData = ppsm.executeQuery();
         rsData.next();
 
-        JSONObject userEventData = new JSONObject();
-        userEventData.put("year",rsData.getInt("year"));
-        userEventData.put("year_num",rsData.getInt("year_num"));
-        userEventData.put("sheet_bill_id",sheetID);
+        JSONObject object = new JSONObject();
+        object.put("year",rsData.getString("year"));
+        object.put("year_num",rsData.getString("year_num"));
+        object.put("sheet_receipt_id",sheetID);
 
         JSONObject sendData = new JSONObject();
-        sendData.put("type", ClientEvents.SHEET_BILL_RECEIVE.getString());
-        sendData.put("data",userEventData);
-
-        this.messager.send(sendData.toString(),this.sessionID);
+        sendData.put("type", ClientEvents.NOTIFICATE.toString());
     }
 
     public void sendList() throws SQLException, JMSException {
-        PreparedStatement ppsm = this.database.preparedQuery("SELECT `sheet_bill_id`, `year`, `year_num`, `date` " +
-                "FROM `sheetbill` ORDER BY `sheet_bill_id` DESC ");
+        PreparedStatement ppsm = this.database.preparedQuery("SELECT `sheet_receipt_id` , `year`, `year_num`, `date` " +
+                "FROM `sheetreceipt` ORDER BY `sheet_receipt_id` DESC ");
         ppsm.execute();
 
         ResultSet rs = ppsm.getResultSet();
@@ -78,7 +75,7 @@ public class SheetBillSendDB extends Worker implements Runnable{
 
         while (rs.next()){
             JSONObject object = new JSONObject();
-            object.put("sheet_bill_id",rs.getInt("sheet_bill_id"));
+            object.put("sheet_receipt_id", rs.getInt("sheet_receipt_id"));
             object.put("year",rs.getInt("year"));
             object.put("year_num",rs.getInt("year_num"));
             object.put("date",rs.getString("date"));
@@ -94,5 +91,4 @@ public class SheetBillSendDB extends Worker implements Runnable{
 
         this.messager.send(sendData.toString(),this.sessionID);
     }
-
 }

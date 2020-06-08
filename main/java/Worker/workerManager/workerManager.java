@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class workerManager {
     static ArrayList<Thread> workers = new ArrayList<Thread>();
     Messager messager;
-    private static int WORKER_NUMBER = 10;
+    private static int WORKER_NUMBER = 100;
     private static int no = 0;
 
     public workerManager(){
@@ -25,15 +25,14 @@ public class workerManager {
     }
 
     void updateQueue(){
-        JsonParser jsonParser = new JsonParser();
         while(true){
             try {
                 this.clearThread();
-                if(this.workers.size() >= 10) continue;
+                if(this.workers.size() >= WORKER_NUMBER) continue;
                 Message message = this.messager.recieve();
                 TextMessage textMessage = (TextMessage) message;
                 String newMessage = textMessage.getText();
-                System.out.println(newMessage);
+//                System.out.println(newMessage);
 
                 String sessionID = message.getStringProperty("session_id");
                 JSONObject objectFromString = new JSONObject(newMessage);
@@ -95,6 +94,11 @@ public class workerManager {
                     workers.add(th);
                     th.start();
                     System.out.println("==> sheet_Bill_TO_DB" + workers.size());
+                }else if (type.equals(ServerEvents.GET_EDIT_REGISTER.getString())){
+                    Thread th = new Thread(new EditRegisterWorker(data,this.messager,sessionID));
+                    workers.add(th);
+                    th.start();
+                    System.out.println("==> editRegisterSuccess");
                 }
             } catch (JMSException e) {
                 e.printStackTrace();

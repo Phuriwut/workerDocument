@@ -26,7 +26,7 @@ public class UserListWorker extends Worker implements Runnable{
     }
 
     public void sendClient() throws SQLException {
-        PreparedStatement ppsm = this.database.preparedQuery("SELECT `user_id`, `userID`, `FirstnameContract`, `LastnameContract`" +
+        PreparedStatement ppsm = this.database.preparedQuery("SELECT * " +
                 "FROM `user`");
         ppsm.execute();
         ResultSet rs = ppsm.getResultSet();
@@ -35,9 +35,11 @@ public class UserListWorker extends Worker implements Runnable{
         while (rs.next()){
             JSONObject obj = new JSONObject();
             obj.put("user_id",rs.getInt("user_id"));
-            obj.put("userID",rs.getInt("userID"));
-            obj.put("FirstnameContract",rs.getString("FirstnameContract"));
-            obj.put("LastnameContract",rs.getString("LastnameContract"));
+            obj.put("userID",rs.getString("userID"));
+            obj.put("branch",rs.getString("branch"));
+            obj.put("customerName",rs.getString("nameConsumer"));
+            obj.put("contactName",rs.getString("FirstnameContract"));
+            obj.put("contactSurname",rs.getString("LastnameContract"));
             array.put(obj);
         }
         JSONObject sendObj = new JSONObject();

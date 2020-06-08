@@ -40,7 +40,6 @@ public class OrderListWorker extends Worker implements Runnable{
             userEventData.put("list", rs.getString("list"));
             userEventData.put("amount", rs.getInt("amount"));
             userEventData.put("pricePerUnit", rs.getInt("unitPrice"));
-            userEventData.put("cost", rs.getInt("cost"));
             userEventData.put("type", rs.getInt("type"));
             userEventData.put("order_id", rs.getInt("order_id"));
 //            userEventData.put("junior",rs.getString(database));

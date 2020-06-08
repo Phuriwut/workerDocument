@@ -31,14 +31,13 @@ public class  OrderListSendDB extends Worker implements Runnable {
 
     public void successOrder() throws SQLException, JMSException {
         PreparedStatement ppsm = this.database.preparedQuery(
-                "INSERT INTO `orderlist`(`sheet_id`, `list`, `amount`, `unitPrice`, `cost`, `type`) " +
-                        "VALUES (?,?,?,?,?,?)");
+                "INSERT INTO `orderlist`(`sheet_id`, `list`, `amount`, `unitPrice`, `type`) " +
+                        "VALUES (?,?,?,?,?)");
         ppsm.setInt(1,this.data.getInt("sheet_id"));
         ppsm.setString(2,this.data.getString("list"));
         ppsm.setInt(3,this.data.getInt("amount"));
         ppsm.setInt(4,this.data.getInt("pricePerUnit"));
-        ppsm.setInt(5,this.data.getInt("cost"));
-        ppsm.setInt(6,this.data.getInt("type"));
+        ppsm.setInt(5,this.data.getInt("type"));
         ppsm.execute();
 
         sendOrderList();
@@ -59,7 +58,6 @@ public class  OrderListSendDB extends Worker implements Runnable {
             userEventData.put("list", rs.getString("list"));
             userEventData.put("amount", rs.getInt("amount"));
             userEventData.put("pricePerUnit", rs.getInt("unitPrice"));
-            userEventData.put("cost", rs.getInt("cost"));
             userEventData.put("type", rs.getInt("type"));
             userEventData.put("order_id", rs.getInt("order_id"));
 //            userEventData.put("junior",rs.getString(database));
