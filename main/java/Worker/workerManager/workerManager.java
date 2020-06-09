@@ -99,6 +99,11 @@ public class workerManager {
                     workers.add(th);
                     th.start();
                     System.out.println("==> editRegisterSuccess");
+                }else if (type.equals(ServerEvents.GET_SHEET_LIST.getString())){
+                    Thread th = new Thread(new SheetListWorker(data,this.messager,sessionID));
+                    workers.add(th);
+                    th.start();
+                    System.out.println("==> sheetListWorker");
                 }
             } catch (JMSException e) {
                 e.printStackTrace();
