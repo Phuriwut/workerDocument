@@ -23,13 +23,12 @@ public class OrderListUpdateWorker extends Worker implements Runnable{
     }
 
     public void updateOrderList() throws SQLException, JMSException {
-        PreparedStatement ppsm = this.database.preparedQuery("UPDATE `orderlist` SET `list`= ? ,`amount`= ? ,`unitPrice`= ? ,`cost`= ? ,`type`= ? WHERE `order_id`= ?");
-        ppsm.setInt(6,this.data.getInt("order_id"));
+        PreparedStatement ppsm = this.database.preparedQuery("UPDATE `orderlist` SET `list`= ? ,`amount`= ? ,`unitPrice`= ? , `type`= ? WHERE `order_id`= ?");
+        ppsm.setInt(5,this.data.getInt("order_id"));
         ppsm.setString(1,this.data.getString("list"));
         ppsm.setInt(2,this.data.getInt("amount"));
         ppsm.setInt(3,this.data.getInt("pricePerUnit"));
-        ppsm.setInt(4,this.data.getInt("cost"));
-        ppsm.setInt(5,this.data.getInt("type"));
+        ppsm.setInt(4,this.data.getInt("type"));
         ppsm.execute();
 
         JSONObject obj = new JSONObject();
