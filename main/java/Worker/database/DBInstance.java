@@ -12,7 +12,7 @@ public class DBInstance {
     Statement stmt;
 
     DBInstance() throws SQLException, ClassNotFoundException {
-        String urls = "jdbc:mysql://localhost:3306/isc?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+        String urls = "jdbc:mysql://0.0.0.0:3306/isc_project?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
         Class.forName("com.mysql.jdbc.Driver");
         this.con = DriverManager.getConnection(urls,"root","root");
         this.stmt = con.createStatement();
@@ -28,6 +28,5 @@ public class DBInstance {
 
     public PreparedStatement preparedQuery(String sql) throws SQLException {
         return this.con.prepareStatement(sql);
-
     }
 }

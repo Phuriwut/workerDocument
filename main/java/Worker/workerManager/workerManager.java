@@ -32,7 +32,7 @@ public class workerManager {
                 Message message = this.messager.recieve();
                 TextMessage textMessage = (TextMessage) message;
                 String newMessage = textMessage.getText();
-//                System.out.println(newMessage);
+                System.out.println(newMessage);
 
                 String sessionID = message.getStringProperty("session_id");
                 JSONObject objectFromString = new JSONObject(newMessage);
@@ -65,6 +65,11 @@ public class workerManager {
                     th.start();
                     System.out.println("==> orderListWorker");
                 }else if (type.equals(ServerEvents.EDIT_SHEET_LIST.getString())){
+                    Thread th = new Thread(new SheetEditWorker(data,this.messager,sessionID));
+                    workers.add(th);
+                    th.start();
+                    System.out.println("==> sheetEditWorker");
+                }else if (type.equals(ServerEvents.UPDATE_SHEET_LIST.getString())){
                     Thread th =new Thread(new SheetUpdateWorker(data,this.messager,sessionID));
                     workers.add(th);
                     th.start();
