@@ -24,14 +24,14 @@ public class SheetUpdateWorker extends Worker implements Runnable{
     }
 
     public void updateSheet() throws SQLException, JMSException {
-        PreparedStatement ppsm = this.database.preparedQuery("UPDATE `sheet` SET `user_id`= ? ,`date`= ? ,`day`= ? ,`salesman`= ? ,`year`= ? ,`year_num`= ? WHERE `sheet_id`= ?");
+        PreparedStatement ppsm = this.database.preparedQuery("UPDATE `sheet` SET `user_id`= ? ,`date`= ? ,`day`= ? ,`salesman`= ? ,`note` = ? , `condi` = ? WHERE `sheet_id`= ?");
         ppsm.setInt(7,this.data.getInt("sheet_id"));
         ppsm.setInt(1,this.data.getInt("user_id"));
         ppsm.setString(2,this.data.getString("date"));
         ppsm.setInt(3,this.data.getInt("day"));
         ppsm.setString(4,this.data.getString("salesman"));
-        ppsm.setInt(5,this.data.getInt("year"));
-        ppsm.setInt(6,this.data.getInt("year_num"));
+        ppsm.setString(5,this.data.getString("note"));
+        ppsm.setString(6,this.data.getString("condi"));
         ppsm.execute();
 
         JSONObject object = new JSONObject();
